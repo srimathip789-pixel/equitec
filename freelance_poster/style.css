@@ -1,209 +1,357 @@
 :root {
+    --bg-main: #0a0b10;
     --primary: #6366f1;
-    --secondary: #a855f7;
-    --accent: #ec4899;
-    --dark: #0f172a;
-    --light: #f8fafc;
-    --glass: rgba(255, 255, 255, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.2);
+    --primary-glow: rgba(99, 102, 241, 0.15);
+    --accent: #fbbf24;
+    --text-head: #ffffff;
+    --text-body: #94a3b8;
+    --white: #ffffff;
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --border-light: rgba(255, 255, 255, 0.08);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
 body {
-    background-color: var(--dark);
+    background-color: #000;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    font-family: 'Outfit', sans-serif;
 }
 
-.poster-container {
+.poster {
     width: 1080px;
-    height: 1350px;
-    background-image: url('background.png');
-    background-size: cover;
-    background-position: center;
+    height: 1520px;
+    background-color: var(--bg-main);
     position: relative;
-    overflow: hidden;
-    padding: 60px;
-    display: flex;
-    flex-direction: column;
-    color: var(--light);
-    box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
+    /* Removed overflow: hidden to prevent clipping */
+    color: var(--text-head);
+    border: 15px solid #161821;
 }
 
-.overlay {
+/* Sophisticated Dark Background Design */
+.mesh-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background:
+        radial-gradient(circle at 0% 0%, #1e1b4b 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, #2e1065 0%, transparent 50%),
+        #0a0b10;
+}
+
+/* Subtle Technical Grid for Dark Theme */
+.mesh-bg::after {
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.4) 100%);
-    z-index: 1;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.5;
 }
 
-header,
-main,
-footer {
-    position: relative;
-    z-index: 2;
-}
-
-header {
-    margin-bottom: 50px;
-    display: flex;
-    justify-content: center;
-}
-
-.profile-section {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    background: var(--glass);
-    padding: 20px 40px;
-    border-radius: 100px;
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
-}
-
-.profile-img-container {
-    width: 120px;
-    height: 120px;
+/* Elegant Light Accents */
+.mesh-bg::before {
+    content: '';
+    position: absolute;
+    top: -150px;
+    right: -150px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
     border-radius: 50%;
-    border: 4px solid var(--primary);
-    overflow: hidden;
-    background: #fff;
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
 }
 
-.profile-img-container img {
-    width: 100%;
+.main-content {
+    position: relative;
+    z-index: 10;
     height: 100%;
-    object-fit: cover;
-}
-
-.title-section h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    letter-spacing: -1px;
-    background: linear-gradient(to right, #fff, #ccc);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.subtitle {
-    font-size: 1.2rem;
-    color: var(--primary);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-.intro {
-    text-align: center;
-    margin-bottom: 60px;
-}
-
-.intro h2 {
-    font-size: 2.8rem;
-    margin-bottom: 15px;
-    background: linear-gradient(to right, var(--primary), var(--secondary), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.intro p {
-    font-size: 1.4rem;
-    opacity: 0.9;
-    font-weight: 300;
-}
-
-.services-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-    margin-bottom: 60px;
-}
-
-.service-item {
-    background: var(--glass);
-    padding: 40px;
-    border-radius: 30px;
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
-    transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 40px 60px;
+    /* Reduced from 60px 80px */
+}
+
+/* Hero Header */
+.hero-header {
     text-align: center;
+    margin-bottom: 30px;
+    /* Reduced from 40px */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.service-item:hover {
-    transform: translateY(-10px);
-    background: rgba(255, 255, 255, 0.15);
-    border-color: var(--primary);
-}
-
-.service-item .icon {
-    font-size: 3rem;
+.profile-container {
+    position: relative;
+    width: 170px;
+    /* Reduced from 200px */
+    height: 170px;
     margin-bottom: 20px;
-    background: linear-gradient(to bottom right, var(--primary), var(--accent));
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    object-fit: cover;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.main-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 72px;
+    /* Reduced from 84px */
+    font-weight: 950;
+    letter-spacing: -2px;
+    margin-bottom: 10px;
+    background: linear-gradient(to bottom, #fff, #bbb);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.service-item h3 {
-    font-size: 1.6rem;
-    margin-bottom: 10px;
-    font-weight: 600;
-}
-
-.service-item p {
-    font-size: 1.1rem;
-    opacity: 0.8;
-    line-height: 1.6;
-}
-
-footer {
-    margin-top: auto;
-    text-align: center;
-}
-
-.cta {
-    background: linear-gradient(90deg, var(--primary), var(--secondary));
-    padding: 30px;
-    border-radius: 25px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.cta p {
-    font-size: 1.5rem;
-    font-weight: 600;
+.hero-badge {
+    background: var(--primary);
+    color: var(--white);
+    padding: 8px 30px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 3px;
     margin-bottom: 15px;
 }
 
-.contact-links {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+.hero-tagline {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-body);
+    max-width: 700px;
 }
 
-.link {
-    font-size: 1.2rem;
-    background: rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    border-radius: 50px;
+/* Service Grid */
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-bottom: 35px;
+    /* Reduced from 50px */
+    width: 100%;
+}
+
+.feature-card {
+    background: var(--card-bg);
+    padding: 25px 15px;
+    /* Reduced from 35px 20px */
+    border-radius: 25px;
+    text-align: center;
+    border: 1px solid var(--border-light);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--primary);
+}
+
+.card-icon {
+    font-size: 32px;
+    color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+    width: 65px;
+    height: 65px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+}
+
+.feature-card h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: #fff;
+}
+
+.feature-card p {
+    font-size: 13px;
+    color: var(--text-body);
+    line-height: 1.5;
+}
+
+
+
+/* Client Focus */
+.client-focus {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 30px;
+    /* Reduced from 40px */
+}
+
+.label {
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+}
+
+.client-pills {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.pill {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    border: 1px solid var(--border-light);
+}
+
+/* Trust Bar */
+.trust-bar {
+    display: flex;
+    justify-content: center;
+    /* Added for proper alignment */
+    gap: 50px;
+    margin-bottom: 35px;
+}
+
+.trust-item {
+    font-size: 14px;
+    font-weight: 800;
+    color: #f8fafc;
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.link i {
-    color: #0077b5;
+.trust-item i {
+    color: var(--accent);
+}
+
+/* Footer Section */
+.footer-cta {
+    width: 100%;
+    margin-top: auto;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 20px 30px;
+    /* Reduced padding further */
+    border-radius: 25px;
+    border: 1px solid var(--border-light);
+}
+
+.footer-content-wrapper {
+    display: flex;
+    justify-content: center;
+    /* Center the group */
+    align-items: center;
+    gap: 60px;
+    /* Increased gap for balance */
+    margin-bottom: 20px;
+}
+
+.footer-text-side {
+    text-align: left;
+}
+
+.cta-text {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 25px;
+    /* Increased margin for breathing room */
+    color: #fff;
+    text-align: center;
+    /* Explicitly centered */
+}
+
+.contact-strip {
+    display: flex;
+    flex-direction: column;
+    /* List style for better spacing with QR */
+    gap: 10px;
+}
+
+.contact-link {
+    font-size: 13px;
+    font-weight: 500;
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.contact-link:hover {
+    color: var(--primary);
+}
+
+.contact-link i {
+    color: var(--primary);
+    width: 16px;
+    text-align: center;
+}
+
+/* QR Code Styling */
+.qr-side {
+    flex-shrink: 0;
+}
+
+.qr-box {
+    background: #fff;
+    padding: 8px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.qr-code-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 4px;
+}
+
+.qr-label {
+    margin-top: 6px;
+    font-size: 9px;
+    font-weight: 900;
+    color: #000;
+    letter-spacing: 1px;
+}
+
+.geography {
+    margin-top: 15px;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 5px;
+    color: var(--primary);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 15px;
+    padding-bottom: 20px;
+    /* Added padding to ensure it's not on the very edge */
 }
