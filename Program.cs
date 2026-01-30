@@ -57,17 +57,13 @@ namespace EquitecMachineTest
                         case "4": DeleteOrder(); break;
                         case "5": return;
                         default: 
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Invalid choice! Press Enter.");
-                            Console.ResetColor();
+                            PrintMessage("Invalid choice! Press Enter.", ConsoleColor.Red);
                             break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"\n[CRITICAL ERROR]: {ex.Message}");
-                    Console.ResetColor();
+                    PrintMessage($"\n[CRITICAL ERROR]: {ex.Message}", ConsoleColor.Red);
                 }
 
                 Console.WriteLine("\nPress any key to return to menu...");
@@ -81,8 +77,8 @@ namespace EquitecMachineTest
             Console.WriteLine("\n--- Fetching Orders... ---");
             
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\nID | Client         | Stock      | Qty | Price     | Type");
-            Console.WriteLine("----------------------------------------------------------");
+            Console.WriteLine("\nID | Client         | Stock      | Qty | Price       | Type");
+            Console.WriteLine("------------------------------------------------------------");
             Console.ResetColor();
 
             if (tradeOrders.Count == 0)
@@ -93,7 +89,7 @@ namespace EquitecMachineTest
             {
                 foreach (var order in tradeOrders)
                 {
-                    Console.WriteLine($"{order.OrderId,-2} | {order.ClientName,-14} | {order.StockSymbol,-10} | {order.Quantity,-3} | {order.Price,-9} | {order.OrderType}");
+                    Console.WriteLine($"{order.OrderId,-2} | {order.ClientName,-14} | {order.StockSymbol,-10} | {order.Quantity,-3} | {order.Price,-11:C2} | {order.OrderType}");
                 }
             }
         }
@@ -105,20 +101,14 @@ namespace EquitecMachineTest
             Console.WriteLine("\n--- Place New Trade Order ---");
             Console.ResetColor();
 
-            Console.Write("Client Name: ");
-            string client = Console.ReadLine();
-            
-            Console.Write("Stock Symbol (e.g. TCS): ");
-            string symbol = Console.ReadLine();
-            
-            Console.Write("Quantity: ");
-            if (!int.TryParse(Console.ReadLine(), out int qty)) { Console.WriteLine("Invalid Quantity!"); return; }
-            
-            Console.Write("Price: ");
-            if (!decimal.TryParse(Console.ReadLine(), out decimal price)) { Console.WriteLine("Invalid Price!"); return; }
+            string client = GetValidString("Client Name: ");
+            string symbol = GetValidString("Stock Symbol (e.g. TCS): ");
+            int qty = GetValidInt("Quantity: ");
+            decimal price = GetValidDecimal("Price: ");
             
             Console.Write("Type (BUY/SELL): ");
-            string type = Console.ReadLine().ToUpper();
+            string type = Console.ReadLine()?.ToUpper();
+            if (string.IsNullOrWhiteSpace(type)) type = "BUY"; // Default
 
             // Add to List
             var newOrder = new TradeOrder
@@ -132,9 +122,7 @@ namespace EquitecMachineTest
             };
             tradeOrders.Add(newOrder);
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(">>> Success! Order successfully placed in Memory.");
-            Console.ResetColor();
+            PrintMessage(">>> Success! Order successfully placed in Memory.", ConsoleColor.Green);
         }
 
         // --- 3. UPDATE ---
@@ -143,22 +131,20 @@ namespace EquitecMachineTest
             Console.WriteLine("\n--- Update Order Price ---");
             ReadOrders(); // Show list first so they know ID
             
-            Console.Write("\nEnter Order ID to Update: ");
-            if (!int.TryParse(Console.ReadLine(), out int id)) return;
+            int id = GetValidInt("\nEnter Order ID to Update: ");
 
             var order = tradeOrders.FirstOrDefault(o => o.OrderId == id);
             if (order == null)
             {
-                Console.WriteLine(">>> Error: Order ID not found.");
+                PrintMessage(">>> Error: Order ID not found.", ConsoleColor.Red);
                 return;
             }
 
-            Console.Write("Enter New Price: ");
-            if (!decimal.TryParse(Console.ReadLine(), out decimal price)) return;
+            decimal price = GetValidDecimal("Enter New Price: ");
 
             // Update Object
             order.Price = price;
-            Console.WriteLine(">>> Price updated successfully!");
+            PrintMessage(">>> Price updated successfully!", ConsoleColor.Green);
         }
 
         // --- 4. DELETE ---
@@ -169,19 +155,70 @@ namespace EquitecMachineTest
             Console.ResetColor();
             ReadOrders();
 
-            Console.Write("\nEnter Order ID to Delete: ");
-            if (!int.TryParse(Console.ReadLine(), out int id)) return;
+            int id = GetValidInt("\nEnter Order ID to Delete: ");
 
             var order = tradeOrders.FirstOrDefault(o => o.OrderId == id);
             if (order == null)
             {
-                Console.WriteLine(">>> Error: Order ID not found.");
+                PrintMessage(">>> Error: Order ID not found.", ConsoleColor.Red);
                 return;
             }
 
             // Remove from List
             tradeOrders.Remove(order);
-            Console.WriteLine(">>> Order cancelled (Deleted)!");
+            PrintMessage(">>> Order cancelled (Deleted)!", ConsoleColor.Yellow);
+        }
+
+        // === HELPER METHODS ===
+
+        static string GetValidString(string prompt)
+        {
+            string input;
+            do
+            {
+                Console.Write(prompt);
+                input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    PrintMessage("Input cannot be empty. Please try again.", ConsoleColor.DarkYellow);
+                }
+            } while (string.IsNullOrWhiteSpace(input));
+            return input;
+        }
+
+        static int GetValidInt(string prompt)
+        {
+            int value;
+            while (true)
+            {
+                Console.Write(prompt);
+                if (int.TryParse(Console.ReadLine(), out value) && value > 0)
+                {
+                    return value;
+                }
+                PrintMessage("Invalid number. Please enter a valid positive integer.", ConsoleColor.DarkYellow);
+            }
+        }
+
+        static decimal GetValidDecimal(string prompt)
+        {
+            decimal value;
+            while (true)
+            {
+                Console.Write(prompt);
+                if (decimal.TryParse(Console.ReadLine(), out value) && value > 0)
+                {
+                    return value;
+                }
+                PrintMessage("Invalid price. Please enter a valid positive decimal.", ConsoleColor.DarkYellow);
+            }
+        }
+
+        static void PrintMessage(string message, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(message);
+            Console.ResetColor();
         }
     }
 }
